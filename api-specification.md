@@ -1358,6 +1358,31 @@
 
 ---
 
+### POST /api/WorkoutTracking/deleteSession
+
+**Description:** Deletes a workout session and all associated exercise records.
+
+**Request Body:**
+```json
+{
+  "sessionId": "string"
+}
+```
+
+**Success Response:**
+```json
+{}
+```
+
+**Error Response:**
+```json
+{
+  "error": "string"
+}
+```
+
+---
+
 ### POST /api/WorkoutTracking/_getAllWeeklyVolume
 
 **Description:** Gets all weekly volume records.
