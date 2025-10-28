@@ -491,7 +491,7 @@ onMounted(() => {
 <style scoped>
 .workout-tracking {
   padding: 1rem;
-  color: #495057;
+  color: #90caf9;
 }
 
 .header {
@@ -504,7 +504,7 @@ onMounted(() => {
 }
 
 .header h2 {
-  color: #2c3e50;
+  color: #64b5f6;
   margin: 0;
 }
 
@@ -516,24 +516,25 @@ onMounted(() => {
 
 .user-select {
   padding: 0.75rem;
-  border: 1px solid #ced4da;
+  border: 1px solid #90caf9;
   border-radius: 4px;
   font-size: 1rem;
   min-width: 200px;
+  background: #f0f8ff;
 }
 
 .current-session {
-  background: white;
-  border: 1px solid #dee2e6;
+  background: linear-gradient(to bottom, #ffffff, #f0f8ff);
+  border: 1px solid #90caf9;
   border-radius: 8px;
   padding: 2rem;
   margin-bottom: 2rem;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 8px rgba(33, 150, 243, 0.2);
 }
 
 .current-session h3 {
   margin-top: 0;
-  color: #2c3e50;
+  color: #64b5f6;
 }
 
 .session-info {
@@ -549,7 +550,7 @@ onMounted(() => {
 }
 
 .info-item strong {
-  color: #495057;
+  color: #90caf9;
 }
 
 .add-exercise-form {
@@ -557,7 +558,7 @@ onMounted(() => {
 }
 
 .add-exercise-form h4 {
-  color: #495057;
+  color: #90caf9;
   margin-bottom: 1rem;
 }
 
@@ -576,7 +577,7 @@ onMounted(() => {
   display: block;
   margin-bottom: 0.5rem;
   font-weight: 500;
-  color: #495057;
+  color: #90caf9;
 }
 
 .form-group input,
@@ -584,9 +585,10 @@ onMounted(() => {
 .form-group textarea {
   width: 100%;
   padding: 0.75rem;
-  border: 1px solid #ced4da;
+  border: 1px solid #90caf9;
   border-radius: 4px;
   font-size: 1rem;
+  background: #f0f8ff;
 }
 
 .form-actions {
@@ -599,7 +601,7 @@ onMounted(() => {
 }
 
 .session-exercises h4 {
-  color: #495057;
+  color: #90caf9;
   margin-bottom: 1rem;
 }
 
@@ -614,13 +616,13 @@ onMounted(() => {
   justify-content: space-between;
   align-items: center;
   padding: 1rem;
-  background: #f8f9fa;
+  background: linear-gradient(to right, #f0f8ff, #e1f5fe);
   border-radius: 6px;
-  border: 1px solid #dee2e6;
+  border: 1px solid #90caf9;
 }
 
 .exercise-details strong {
-  color: #2c3e50;
+  color: #64b5f6;
 }
 
 .exercise-stats {
@@ -642,17 +644,17 @@ onMounted(() => {
 }
 
 .workout-history {
-  background: white;
-  border: 1px solid #dee2e6;
+  background: linear-gradient(to bottom, #ffffff, #f0f8ff);
+  border: 1px solid #90caf9;
   border-radius: 8px;
   padding: 2rem;
   margin-bottom: 2rem;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 8px rgba(33, 150, 243, 0.2);
 }
 
 .workout-history h3 {
   margin-top: 0;
-  color: #2c3e50;
+  color: #64b5f6;
 }
 
 .history-controls {
@@ -665,18 +667,20 @@ onMounted(() => {
 
 .filter-select {
   padding: 0.75rem;
-  border: 1px solid #ced4da;
+  border: 1px solid #90caf9;
   border-radius: 4px;
   font-size: 1rem;
   min-width: 200px;
+  background: #f0f8ff;
 }
 
 .limit-input {
   padding: 0.75rem;
-  border: 1px solid #ced4da;
+  border: 1px solid #90caf9;
   border-radius: 4px;
   font-size: 1rem;
   width: 100px;
+  background: #f0f8ff;
 }
 
 .history-list {
@@ -690,9 +694,9 @@ onMounted(() => {
   justify-content: space-between;
   align-items: center;
   padding: 1rem;
-  background: #f8f9fa;
+  background: linear-gradient(to right, #f0f8ff, #e1f5fe);
   border-radius: 6px;
-  border: 1px solid #dee2e6;
+  border: 1px solid #90caf9;
 }
 
 .history-details {
@@ -700,7 +704,7 @@ onMounted(() => {
 }
 
 .history-exercise strong {
-  color: #2c3e50;
+  color: #64b5f6;
 }
 
 .history-stats {
@@ -727,16 +731,16 @@ onMounted(() => {
 }
 
 .user-sessions {
-  background: white;
-  border: 1px solid #dee2e6;
+  background: linear-gradient(to bottom, #ffffff, #f0f8ff);
+  border: 1px solid #90caf9;
   border-radius: 8px;
   padding: 2rem;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 8px rgba(33, 150, 243, 0.2);
 }
 
 .user-sessions h3 {
   margin-top: 0;
-  color: #2c3e50;
+  color: #64b5f6;
 }
 
 .sessions-list {
@@ -750,9 +754,9 @@ onMounted(() => {
   justify-content: space-between;
   align-items: center;
   padding: 1rem;
-  background: #f8f9fa;
+  background: linear-gradient(to right, #f0f8ff, #e1f5fe);
   border-radius: 6px;
-  border: 1px solid #dee2e6;
+  border: 1px solid #90caf9;
 }
 
 .session-actions {
@@ -762,7 +766,7 @@ onMounted(() => {
 }
 
 .session-details strong {
-  color: #2c3e50;
+  color: #64b5f6;
 }
 
 .session-meta {
@@ -799,12 +803,12 @@ onMounted(() => {
 }
 
 .btn-primary {
-  background: #42b883;
+  background: #42a5f5;
   color: white;
 }
 
 .btn-primary:hover:not(:disabled) {
-  background: #369870;
+  background: #1e88e5;
 }
 
 .btn-secondary {
@@ -838,17 +842,17 @@ onMounted(() => {
 }
 
 .session-details-modal {
-  background: white;
-  border: 1px solid #dee2e6;
+  background: linear-gradient(to bottom, #ffffff, #f0f8ff);
+  border: 1px solid #90caf9;
   border-radius: 8px;
   padding: 2rem;
   margin-top: 2rem;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 8px rgba(33, 150, 243, 0.2);
 }
 
 .session-details-modal h3 {
   margin-top: 0;
-  color: #2c3e50;
+  color: #64b5f6;
   margin-bottom: 1.5rem;
 }
 
@@ -864,13 +868,13 @@ onMounted(() => {
   justify-content: space-between;
   align-items: center;
   padding: 1rem;
-  background: #f8f9fa;
+  background: linear-gradient(to right, #f0f8ff, #e1f5fe);
   border-radius: 6px;
-  border: 1px solid #dee2e6;
+  border: 1px solid #90caf9;
 }
 
 .detail-exercise-info strong {
-  color: #2c3e50;
+  color: #64b5f6;
 }
 
 .detail-exercise-stats {

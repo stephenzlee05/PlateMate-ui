@@ -295,21 +295,21 @@ onMounted(() => {
 }
 
 .header h2 {
-  color: #2c3e50;
+  color: #4a90a4;
   margin: 0;
 }
 
 .create-form {
-  background: #f8f9fa;
+  background: #fafcfd;
   padding: 2rem;
   border-radius: 8px;
   margin-bottom: 2rem;
-  border: 1px solid #dee2e6;
+  border: 1px solid #d1e7f0;
 }
 
 .create-form h3 {
   margin-top: 0;
-  color: #495057;
+  color: #5a9bb4;
 }
 
 .form-group {
@@ -327,9 +327,10 @@ onMounted(() => {
 .form-group select {
   width: 100%;
   padding: 0.75rem;
-  border: 1px solid #ced4da;
+  border: 1px solid #90caf9;
   border-radius: 4px;
   font-size: 1rem;
+  background: #f0f8ff;
 }
 
 .checkbox-label {
@@ -360,23 +361,24 @@ onMounted(() => {
 .search-input {
   flex: 1;
   padding: 0.75rem;
-  border: 1px solid #ced4da;
+  border: 1px solid #d1e7f0;
   border-radius: 4px;
   font-size: 1rem;
+  background: #fafcfd;
 }
 
 .user-details {
-  background: white;
-  border: 1px solid #dee2e6;
+  background: linear-gradient(to bottom, #ffffff, #fafcfd);
+  border: 1px solid #d1e7f0;
   border-radius: 8px;
   padding: 2rem;
   margin-bottom: 2rem;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 8px rgba(74, 144, 164, 0.08);
 }
 
 .user-details h3 {
   margin-top: 0;
-  color: #2c3e50;
+  color: #4a90a4;
 }
 
 .user-info {
@@ -398,14 +400,15 @@ onMounted(() => {
 }
 
 .preferences-section h4 {
-  color: #495057;
+  color: #5a9bb4;
   margin-bottom: 1rem;
 }
 
 .preferences-form {
-  background: #f8f9fa;
+  background: #fafcfd;
   padding: 1.5rem;
   border-radius: 6px;
+  border: 1px solid #d1e7f0;
 }
 
 .no-preferences {
@@ -415,7 +418,7 @@ onMounted(() => {
 }
 
 .users-list h3 {
-  color: #2c3e50;
+  color: #64b5f6;
   margin-bottom: 1rem;
 }
 
@@ -426,21 +429,22 @@ onMounted(() => {
 }
 
 .user-card {
-  background: white;
-  border: 1px solid #dee2e6;
+  background: linear-gradient(to bottom, #ffffff, #fafcfd);
+  border: 1px solid #d1e7f0;
   border-radius: 8px;
   padding: 1.5rem;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-  transition: box-shadow 0.2s ease;
+  box-shadow: 0 2px 8px rgba(74, 144, 164, 0.08);
+  transition: all 0.3s ease;
 }
 
 .user-card:hover {
-  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+  box-shadow: 0 4px 12px rgba(74, 144, 164, 0.12);
+  transform: translateY(-2px);
 }
 
 .user-card h4 {
   margin-top: 0;
-  color: #2c3e50;
+  color: #4a90a4;
   font-size: 1.25rem;
 }
 
@@ -464,12 +468,12 @@ onMounted(() => {
 }
 
 .btn-primary {
-  background: #42b883;
+  background: #42a5f5;
   color: white;
 }
 
 .btn-primary:hover:not(:disabled) {
-  background: #369870;
+  background: #1e88e5;
 }
 
 .btn-secondary {

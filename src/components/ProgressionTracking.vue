@@ -491,7 +491,7 @@ onMounted(() => {
 <style scoped>
 .progression-tracking {
   padding: 1rem;
-  color: #495057;
+  color: #90caf9;
 }
 
 .header {
@@ -504,7 +504,7 @@ onMounted(() => {
 }
 
 .header h2 {
-  color: #2c3e50;
+  color: #4a90a4;
   margin: 0;
 }
 
@@ -516,24 +516,25 @@ onMounted(() => {
 
 .user-select, .exercise-select {
   padding: 0.75rem;
-  border: 1px solid #ced4da;
+  border: 1px solid #d1e7f0;
   border-radius: 4px;
   font-size: 1rem;
   min-width: 200px;
+  background: #fafcfd;
 }
 
 .weight-suggestion {
-  background: white;
-  border: 1px solid #dee2e6;
+  background: linear-gradient(to bottom, #ffffff, #fafcfd);
+  border: 1px solid #d1e7f0;
   border-radius: 8px;
   padding: 2rem;
   margin-bottom: 2rem;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 8px rgba(74, 144, 164, 0.08);
 }
 
 .weight-suggestion h3 {
   margin-top: 0;
-  color: #2c3e50;
+  color: #4a90a4;
 }
 
 .suggestion-form {
@@ -555,16 +556,17 @@ onMounted(() => {
   display: block;
   margin-bottom: 0.5rem;
   font-weight: 500;
-  color: #495057;
+  color: #5a9bb4;
 }
 
 .form-group input,
 .form-group select {
   width: 100%;
   padding: 0.75rem;
-  border: 1px solid #ced4da;
+  border: 1px solid #d1e7f0;
   border-radius: 4px;
   font-size: 1rem;
+  background: #fafcfd;
 }
 
 .form-actions {
@@ -599,7 +601,7 @@ onMounted(() => {
 
 .suggestion-card h4 {
   margin-top: 0;
-  color: #2c3e50;
+  color: #64b5f6;
 }
 
 .suggestion-details {
@@ -615,7 +617,7 @@ onMounted(() => {
 .suggestion-weight strong,
 .suggestion-action strong,
 .suggestion-reason strong {
-  color: #495057;
+  color: #90caf9;
 }
 
 .action-increase {
@@ -639,17 +641,17 @@ onMounted(() => {
 }
 
 .progression-rules {
-  background: white;
-  border: 1px solid #dee2e6;
+  background: linear-gradient(to bottom, #ffffff, #fafcfd);
+  border: 1px solid #d1e7f0;
   border-radius: 8px;
   padding: 2rem;
   margin-bottom: 2rem;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 8px rgba(74, 144, 164, 0.08);
 }
 
 .progression-rules h3 {
   margin-top: 0;
-  color: #2c3e50;
+  color: #4a90a4;
 }
 
 .rules-controls {
@@ -662,23 +664,24 @@ onMounted(() => {
 
 .filter-select {
   padding: 0.75rem;
-  border: 1px solid #ced4da;
+  border: 1px solid #d1e7f0;
   border-radius: 4px;
   font-size: 1rem;
   min-width: 200px;
+  background: #fafcfd;
 }
 
 .create-rule-form {
-  background: #f8f9fa;
+  background: #fafcfd;
   padding: 2rem;
   border-radius: 8px;
   margin-bottom: 2rem;
-  border: 1px solid #dee2e6;
+  border: 1px solid #d1e7f0;
 }
 
 .create-rule-form h4 {
   margin-top: 0;
-  color: #495057;
+  color: #90caf9;
 }
 
 .rules-list {
@@ -688,20 +691,21 @@ onMounted(() => {
 }
 
 .rule-card {
-  background: #f8f9fa;
-  border: 1px solid #dee2e6;
+  background: linear-gradient(to bottom, #fafcfd, #f0f7f9);
+  border: 1px solid #d1e7f0;
   border-radius: 8px;
   padding: 1.5rem;
-  transition: box-shadow 0.2s ease;
+  transition: all 0.3s ease;
 }
 
 .rule-card:hover {
-  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+  box-shadow: 0 4px 12px rgba(74, 144, 164, 0.12);
+  transform: translateY(-2px);
 }
 
 .rule-card h4 {
   margin-top: 0;
-  color: #2c3e50;
+  color: #4a90a4;
   font-size: 1.25rem;
 }
 
@@ -714,20 +718,20 @@ onMounted(() => {
 }
 
 .stat-item strong {
-  color: #495057;
+  color: #5a9bb4;
 }
 
 .user-progressions {
-  background: white;
-  border: 1px solid #dee2e6;
+  background: linear-gradient(to bottom, #ffffff, #fafcfd);
+  border: 1px solid #d1e7f0;
   border-radius: 8px;
   padding: 2rem;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 8px rgba(74, 144, 164, 0.08);
 }
 
 .user-progressions h3 {
   margin-top: 0;
-  color: #2c3e50;
+  color: #4a90a4;
 }
 
 .progressions-controls {
@@ -745,15 +749,16 @@ onMounted(() => {
 }
 
 .progression-card {
-  background: #f8f9fa;
-  border: 1px solid #dee2e6;
+  background: linear-gradient(to bottom, #fafcfd, #f0f7f9);
+  border: 1px solid #d1e7f0;
   border-radius: 8px;
   padding: 1.5rem;
-  transition: box-shadow 0.2s ease;
+  transition: all 0.3s ease;
 }
 
 .progression-card:hover {
-  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+  box-shadow: 0 4px 12px rgba(74, 144, 164, 0.12);
+  transform: translateY(-2px);
 }
 
 .progression-details {
@@ -762,7 +767,7 @@ onMounted(() => {
 
 .progression-card h4 {
   margin-top: 0;
-  color: #2c3e50;
+  color: #4a90a4;
   font-size: 1.25rem;
 }
 
@@ -790,12 +795,12 @@ onMounted(() => {
 }
 
 .btn-primary {
-  background: #42b883;
+  background: #5a9bb4;
   color: white;
 }
 
 .btn-primary:hover:not(:disabled) {
-  background: #369870;
+  background: #4a90a4;
 }
 
 .btn-secondary {
