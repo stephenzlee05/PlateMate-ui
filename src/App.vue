@@ -80,13 +80,13 @@ header {
 }
 
 header h1 {
-  color: #2c3e50;
+  color: #4a90a4;
   margin-bottom: 0.5rem;
   font-size: 2.5rem;
 }
 
 header p {
-  color: #7f8c8d;
+  color: #5a7a88;
   font-size: 1.1rem;
 }
 
@@ -94,31 +94,31 @@ header p {
   display: flex;
   gap: 0.5rem;
   margin-bottom: 2rem;
-  border-bottom: 2px solid #ecf0f1;
+  border-bottom: 2px solid #90caf9;
   padding-bottom: 1rem;
 }
 
 .tab-button {
-  background: #f8f9fa;
-  border: 1px solid #dee2e6;
+  background: #f5f8fa;
+  border: 1px solid #d1e7f0;
   padding: 0.75rem 1.5rem;
   border-radius: 8px 8px 0 0;
   cursor: pointer;
   font-size: 1rem;
   font-weight: 500;
-  color: #495057;
+  color: #4a90a4;
   transition: all 0.2s ease;
 }
 
 .tab-button:hover {
-  background: #e9ecef;
-  color: #2c3e50;
+  background: #e8f2f7;
+  color: #3a7080;
 }
 
 .tab-button.active {
-  background: #42b883;
+  background: #5a9bb4;
   color: white;
-  border-color: #42b883;
+  border-color: #5a9bb4;
 }
 
 .main-content {

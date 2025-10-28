@@ -242,21 +242,21 @@ onMounted(() => {
 }
 
 .header h2 {
-  color: #2c3e50;
+  color: #4a90a4;
   margin: 0;
 }
 
 .add-form {
-  background: #f8f9fa;
+  background: #fafcfd;
   padding: 2rem;
   border-radius: 8px;
   margin-bottom: 2rem;
-  border: 1px solid #dee2e6;
+  border: 1px solid #d1e7f0;
 }
 
 .add-form h3 {
   margin-top: 0;
-  color: #495057;
+  color: #5a9bb4;
 }
 
 .form-group {
@@ -275,9 +275,10 @@ onMounted(() => {
 .form-group textarea {
   width: 100%;
   padding: 0.75rem;
-  border: 1px solid #ced4da;
+  border: 1px solid #d1e7f0;
   border-radius: 4px;
   font-size: 1rem;
+  background: #fafcfd;
 }
 
 .form-group small {
@@ -302,17 +303,19 @@ onMounted(() => {
 .search-input {
   flex: 1;
   padding: 0.75rem;
-  border: 1px solid #ced4da;
+  border: 1px solid #d1e7f0;
   border-radius: 4px;
   font-size: 1rem;
+  background: #fafcfd;
 }
 
 .filter-select {
   padding: 0.75rem;
-  border: 1px solid #ced4da;
+  border: 1px solid #d1e7f0;
   border-radius: 4px;
   font-size: 1rem;
   min-width: 200px;
+  background: #fafcfd;
 }
 
 .exercise-grid {
@@ -322,21 +325,22 @@ onMounted(() => {
 }
 
 .exercise-card {
-  background: white;
-  border: 1px solid #dee2e6;
+  background: linear-gradient(to bottom, #ffffff, #fafcfd);
+  border: 1px solid #d1e7f0;
   border-radius: 8px;
   padding: 1.5rem;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-  transition: box-shadow 0.2s ease;
+  box-shadow: 0 2px 8px rgba(74, 144, 164, 0.08);
+  transition: all 0.3s ease;
 }
 
 .exercise-card:hover {
-  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+  box-shadow: 0 4px 12px rgba(74, 144, 164, 0.12);
+  transform: translateY(-2px);
 }
 
 .exercise-card h3 {
   margin-top: 0;
-  color: #2c3e50;
+  color: #4a90a4;
   font-size: 1.25rem;
 }
 
@@ -360,12 +364,13 @@ onMounted(() => {
 }
 
 .muscle-tag {
-  background: #e3f2fd;
-  color: #1976d2;
+  background: #f0f7f9;
+  color: #3a7080;
   padding: 0.25rem 0.5rem;
   border-radius: 12px;
   font-size: 0.875rem;
   font-weight: 500;
+  border: 1px solid #d1e7f0;
 }
 
 .instructions {
@@ -392,12 +397,12 @@ onMounted(() => {
 }
 
 .btn-primary {
-  background: #42b883;
+  background: #5a9bb4;
   color: white;
 }
 
 .btn-primary:hover:not(:disabled) {
-  background: #369870;
+  background: #4a90a4;
 }
 
 .btn-secondary {

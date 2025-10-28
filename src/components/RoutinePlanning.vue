@@ -362,7 +362,7 @@ onMounted(() => {
 <style scoped>
 .routine-planning {
   padding: 1rem;
-  color: #495057;
+  color: #90caf9;
 }
 
 .header {
@@ -375,7 +375,7 @@ onMounted(() => {
 }
 
 .header h2 {
-  color: #2c3e50;
+  color: #4a90a4;
   margin: 0;
 }
 
@@ -387,24 +387,25 @@ onMounted(() => {
 
 .user-select {
   padding: 0.75rem;
-  border: 1px solid #ced4da;
+  border: 1px solid #d1e7f0;
   border-radius: 4px;
   font-size: 1rem;
   min-width: 200px;
+  background: #fafcfd;
 }
 
 .create-template-form {
-  background: white;
-  border: 1px solid #dee2e6;
+  background: linear-gradient(to bottom, #ffffff, #fafcfd);
+  border: 1px solid #d1e7f0;
   border-radius: 8px;
   padding: 2rem;
   margin-bottom: 2rem;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 8px rgba(74, 144, 164, 0.08);
 }
 
 .create-template-form h3 {
   margin-top: 0;
-  color: #2c3e50;
+  color: #4a90a4;
 }
 
 .form-group {
@@ -415,24 +416,25 @@ onMounted(() => {
   display: block;
   margin-bottom: 0.5rem;
   font-weight: 500;
-  color: #495057;
+  color: #5a9bb4;
 }
 
 .form-group input {
   width: 100%;
   padding: 0.75rem;
-  border: 1px solid #ced4da;
+  border: 1px solid #d1e7f0;
   border-radius: 4px;
   font-size: 1rem;
+  background: #fafcfd;
 }
 
 .exercises-selection {
   max-height: 300px;
   overflow-y: auto;
-  border: 1px solid #ced4da;
+  border: 1px solid #d1e7f0;
   border-radius: 4px;
   padding: 1rem;
-  background: #f8f9fa;
+  background: #fafcfd;
 }
 
 .exercise-option {
@@ -450,7 +452,7 @@ onMounted(() => {
 }
 
 .checkbox-label:hover {
-  background: #e9ecef;
+  background: #f0f7f9;
 }
 
 .checkbox-label input[type="checkbox"] {
@@ -459,7 +461,7 @@ onMounted(() => {
 
 .exercise-name {
   font-weight: 500;
-  color: #2c3e50;
+  color: #4a90a4;
 }
 
 .exercise-muscles {
@@ -472,17 +474,17 @@ onMounted(() => {
 }
 
 .suggested-workout {
-  background: white;
-  border: 1px solid #dee2e6;
+  background: linear-gradient(to bottom, #ffffff, #f0f8ff);
+  border: 1px solid #90caf9;
   border-radius: 8px;
   padding: 2rem;
   margin-bottom: 2rem;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 8px rgba(33, 150, 243, 0.2);
 }
 
 .suggested-workout h3 {
   margin-top: 0;
-  color: #2c3e50;
+  color: #4a90a4;
 }
 
 .suggestion-controls {
@@ -494,9 +496,10 @@ onMounted(() => {
 
 .date-input {
   padding: 0.75rem;
-  border: 1px solid #ced4da;
+  border: 1px solid #d1e7f0;
   border-radius: 4px;
   font-size: 1rem;
+  background: #fafcfd;
 }
 
 .suggestion-result {
@@ -505,15 +508,21 @@ onMounted(() => {
 }
 
 .template-card {
-  background: #f8f9fa;
-  border: 1px solid #dee2e6;
+  background: linear-gradient(to bottom, #fafcfd, #f0f7f9);
+  border: 1px solid #d1e7f0;
   border-radius: 8px;
   padding: 1.5rem;
+  transition: all 0.3s ease;
+}
+
+.template-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(74, 144, 164, 0.12);
 }
 
 .template-card h4 {
   margin-top: 0;
-  color: #2c3e50;
+  color: #4a90a4;
   font-size: 1.25rem;
 }
 
@@ -523,7 +532,7 @@ onMounted(() => {
 
 .template-exercises h5,
 .template-muscles h5 {
-  color: #495057;
+  color: #5a9bb4;
   margin-bottom: 0.5rem;
 }
 
@@ -548,12 +557,13 @@ onMounted(() => {
 }
 
 .muscle-tag {
-  background: #e3f2fd;
-  color: #1976d2;
+  background: #f0f7f9;
+  color: #3a7080;
   padding: 0.25rem 0.5rem;
   border-radius: 12px;
   font-size: 0.875rem;
   font-weight: 500;
+  border: 1px solid #d1e7f0;
 }
 
 .template-actions {
@@ -561,17 +571,17 @@ onMounted(() => {
 }
 
 .user-templates {
-  background: white;
-  border: 1px solid #dee2e6;
+  background: linear-gradient(to bottom, #ffffff, #fafcfd);
+  border: 1px solid #d1e7f0;
   border-radius: 8px;
   padding: 2rem;
   margin-bottom: 2rem;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 8px rgba(74, 144, 164, 0.08);
 }
 
 .user-templates h3 {
   margin-top: 0;
-  color: #2c3e50;
+  color: #4a90a4;
 }
 
 .templates-grid {
@@ -581,16 +591,16 @@ onMounted(() => {
 }
 
 .weekly-volume {
-  background: white;
-  border: 1px solid #dee2e6;
+  background: linear-gradient(to bottom, #ffffff, #fafcfd);
+  border: 1px solid #d1e7f0;
   border-radius: 8px;
   padding: 2rem;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 8px rgba(74, 144, 164, 0.08);
 }
 
 .weekly-volume h3 {
   margin-top: 0;
-  color: #2c3e50;
+  color: #4a90a4;
 }
 
 .volume-controls {
@@ -606,7 +616,7 @@ onMounted(() => {
 }
 
 .volume-chart h4 {
-  color: #495057;
+  color: #5a9bb4;
   margin-bottom: 1rem;
 }
 
@@ -625,7 +635,7 @@ onMounted(() => {
 .volume-muscle {
   min-width: 120px;
   font-weight: 500;
-  color: #495057;
+  color: #5a9bb4;
 }
 
 .volume-bar {
@@ -638,7 +648,7 @@ onMounted(() => {
 
 .volume-fill {
   height: 100%;
-  background: linear-gradient(90deg, #42b883, #369870);
+  background: linear-gradient(90deg, #5a9bb4, #4a90a4);
   transition: width 0.3s ease;
 }
 
@@ -646,7 +656,7 @@ onMounted(() => {
   min-width: 60px;
   text-align: right;
   font-weight: 500;
-  color: #495057;
+  color: #5a9bb4;
 }
 
 .imbalance-warning {
@@ -688,12 +698,12 @@ onMounted(() => {
 }
 
 .btn-primary {
-  background: #42b883;
+  background: #5a9bb4;
   color: white;
 }
 
 .btn-primary:hover:not(:disabled) {
-  background: #369870;
+  background: #4a90a4;
 }
 
 .btn-secondary {
