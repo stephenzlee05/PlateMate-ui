@@ -3,12 +3,9 @@
     <div class="header">
       <h2>Progression Tracking</h2>
       <div class="header-controls">
-        <select v-model="selectedUserId" class="user-select">
-          <option value="">Select User</option>
-          <option v-for="user in users" :key="user.userId" :value="user.userId">
-            {{ user.username }}
-          </option>
-        </select>
+        <div class="user-info">
+          <span class="user-name">{{ currentUser?.username }}</span>
+        </div>
         <select v-model="selectedExerciseId" class="exercise-select">
           <option value="">Select Exercise</option>
           <option v-for="exercise in exercises" :key="exercise.exerciseId" :value="exercise.exerciseId">
@@ -19,7 +16,7 @@
     </div>
 
     <!-- Weight Suggestion -->
-    <div v-if="selectedUserId && selectedExerciseId" class="weight-suggestion">
+    <div v-if="selectedExerciseId" class="weight-suggestion">
       <h3>Weight Progression Suggestion</h3>
       <div class="suggestion-form">
         <form @submit.prevent="getWeightSuggestion">
@@ -188,12 +185,17 @@
               </div>
             </div>
           </div>
+          <div class="rule-actions">
+            <button @click="deleteProgressionRule(rule.exercise)" class="btn btn-sm btn-danger" :disabled="loading">
+              Delete
+            </button>
+          </div>
         </div>
       </div>
     </div>
 
     <!-- User Progressions -->
-    <div v-if="selectedUserId" class="user-progressions">
+    <div class="user-progressions">
       <h3>User Progressions</h3>
       <div class="progressions-controls">
         <select v-model="progressionExerciseFilter" class="filter-select">
@@ -236,7 +238,9 @@
 
 <script setup lang="ts">
 import { ref, computed, watch, onMounted } from 'vue'
-import { progressionEngineApi, userManagementApi, exerciseCatalogApi } from '../services/api'
+import { currentUser, getUserId } from '../services/auth'
+import { progressionEngineApi, exerciseCatalogApi } from '../services/api'
+import { handleApiError } from '../utils/errorHandler'
 import type { 
   ProgressionSuggestion, 
   ProgressionRule, 
@@ -244,9 +248,7 @@ import type {
   SuggestWeightRequest 
 } from '../types/api'
 
-const users = ref<any[]>([])
 const exercises = ref<any[]>([])
-const selectedUserId = ref('')
 const selectedExerciseId = ref('')
 const progressionRules = ref<ProgressionRule[]>([])
 const userProgressions = ref<UserProgression[]>([])
@@ -303,12 +305,13 @@ const actionClass = computed(() => {
 })
 
 const getWeightSuggestion = async () => {
-  if (!selectedUserId.value || !selectedExerciseId.value) return
+  const userId = getUserId()
+  if (!userId || !selectedExerciseId.value) return
 
   loading.value = true
   try {
     const request: SuggestWeightRequest = {
-      user: selectedUserId.value,
+      user: userId,
       exercise: selectedExerciseId.value,
       lastWeight: suggestionForm.value.lastWeight,
       lastSets: suggestionForm.value.lastSets,
@@ -318,20 +321,20 @@ const getWeightSuggestion = async () => {
     const result = await progressionEngineApi.suggestWeight(request)
     weightSuggestion.value = result.suggestion
   } catch (error) {
-    console.error('Error getting weight suggestion:', error)
-    alert('Failed to get weight suggestion. Please try again.')
+    handleApiError(error, 'Failed to get weight suggestion')
   } finally {
     loading.value = false
   }
 }
 
 const applySuggestion = async () => {
-  if (!weightSuggestion.value || !selectedUserId.value || !selectedExerciseId.value) return
+  const userId = getUserId()
+  if (!weightSuggestion.value || !userId || !selectedExerciseId.value) return
 
   loading.value = true
   try {
     await progressionEngineApi.updateProgression(
-      selectedUserId.value,
+      userId,
       selectedExerciseId.value,
       weightSuggestion.value.newWeight
     )
@@ -340,8 +343,7 @@ const applySuggestion = async () => {
     await loadUserProgressions()
     alert('Progression updated successfully!')
   } catch (error) {
-    console.error('Error applying suggestion:', error)
-    alert('Failed to apply suggestion. Please try again.')
+    handleApiError(error, 'Failed to apply suggestion')
   } finally {
     loading.value = false
   }
@@ -390,8 +392,29 @@ const loadProgressionRules = async () => {
   }
 }
 
+const deleteProgressionRule = async (exercise: string) => {
+  const exerciseName = getExerciseName(exercise)
+  if (!confirm(`Are you sure you want to delete the progression rule for ${exerciseName}?`)) {
+    return
+  }
+
+  loading.value = true
+  try {
+    await progressionEngineApi.deleteProgressionRule(exercise)
+    
+    // Reload rules
+    await loadProgressionRules()
+    alert('Progression rule deleted successfully!')
+  } catch (error) {
+    handleApiError(error, 'Failed to delete progression rule')
+  } finally {
+    loading.value = false
+  }
+}
+
 const loadUserProgressions = async () => {
-  if (!selectedUserId.value) return
+  const userId = getUserId()
+  if (!userId) return
 
   loading.value = true
   try {
@@ -399,7 +422,7 @@ const loadUserProgressions = async () => {
     
     // Filter by user and exercise if specified
     userProgressions.value = userProgressions.value.filter(
-      progression => progression.user === selectedUserId.value
+      progression => progression.user === userId
     )
     
     if (progressionExerciseFilter.value) {
@@ -408,8 +431,7 @@ const loadUserProgressions = async () => {
       )
     }
   } catch (error) {
-    console.error('Error loading user progressions:', error)
-    alert('Failed to load user progressions. Please try again.')
+    handleApiError(error, 'Failed to load user progressions')
   } finally {
     loading.value = false
   }
@@ -431,8 +453,7 @@ const updateProgression = async (progression: UserProgression) => {
     await loadUserProgressions()
     alert('Progression updated successfully!')
   } catch (error) {
-    console.error('Error updating progression:', error)
-    alert('Failed to update progression. Please try again.')
+    handleApiError(error, 'Failed to update progression')
   } finally {
     loading.value = false
   }
@@ -447,25 +468,17 @@ const formatDate = (dateString: string) => {
   return new Date(dateString).toLocaleDateString()
 }
 
-const loadUsers = async () => {
-  try {
-    users.value = await userManagementApi.getAllUsers()
-  } catch (error) {
-    console.error('Error loading users:', error)
-  }
-}
-
 const loadExercises = async () => {
   try {
     const result = await exerciseCatalogApi.getAllExercises()
     exercises.value = result.exercises
   } catch (error) {
-    console.error('Error loading exercises:', error)
+    handleApiError(error, 'Failed to load exercises')
   }
 }
 
-// Watch for user selection changes
-watch(selectedUserId, (newUserId) => {
+// Watch for user authentication changes
+watch(() => currentUser.value?.userId, (newUserId) => {
   if (newUserId) {
     suggestionForm.value.user = newUserId
     loadUserProgressions()
@@ -482,9 +495,11 @@ watch(selectedExerciseId, (newExerciseId) => {
 })
 
 onMounted(() => {
-  loadUsers()
   loadExercises()
   loadProgressionRules()
+  if (getUserId()) {
+    loadUserProgressions()
+  }
 })
 </script>
 
@@ -514,7 +529,21 @@ onMounted(() => {
   align-items: center;
 }
 
-.user-select, .exercise-select {
+.user-info {
+  display: flex;
+  align-items: center;
+}
+
+.user-name {
+  font-weight: 600;
+  color: #4a90a4;
+  padding: 0.5rem 1rem;
+  background: #fafcfd;
+  border-radius: 4px;
+  border: 1px solid #d1e7f0;
+}
+
+.exercise-select {
   padding: 0.75rem;
   border: 1px solid #d1e7f0;
   border-radius: 4px;
@@ -696,6 +725,10 @@ onMounted(() => {
   border-radius: 8px;
   padding: 1.5rem;
   transition: all 0.3s ease;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
 }
 
 .rule-card:hover {
@@ -821,9 +854,23 @@ onMounted(() => {
   background: #218838;
 }
 
+.btn-danger {
+  background: #dc3545;
+  color: white;
+}
+
+.btn-danger:hover:not(:disabled) {
+  background: #c82333;
+}
+
 .btn:disabled {
   opacity: 0.6;
   cursor: not-allowed;
+}
+
+.rule-actions {
+  margin-top: 1rem;
+  flex-shrink: 0;
 }
 
 @media (max-width: 768px) {

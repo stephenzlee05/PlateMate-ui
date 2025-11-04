@@ -3,12 +3,9 @@
     <div class="header">
       <h2>Routine Planning</h2>
       <div class="header-controls">
-        <select v-model="selectedUserId" class="user-select">
-          <option value="">Select User</option>
-          <option v-for="user in users" :key="user.userId" :value="user.userId">
-            {{ user.username }}
-          </option>
-        </select>
+        <div class="user-info">
+          <span class="user-name">{{ currentUser?.username }}</span>
+        </div>
         <button @click="showCreateTemplateForm = !showCreateTemplateForm" class="btn btn-primary">
           {{ showCreateTemplateForm ? 'Cancel' : 'Create Template' }}
         </button>
@@ -56,7 +53,7 @@
     </div>
 
     <!-- Suggested Workout -->
-    <div v-if="selectedUserId" class="suggested-workout">
+    <div v-if="currentUser" class="suggested-workout">
       <h3>Suggested Workout</h3>
       <div class="suggestion-controls">
         <input 
@@ -104,9 +101,12 @@
     </div>
 
     <!-- User Templates -->
-    <div v-if="selectedUserId" class="user-templates">
+    <div v-if="currentUser" class="user-templates">
       <h3>Your Templates</h3>
-      <div v-if="userTemplates.length > 0" class="templates-grid">
+      <div v-if="loading && userTemplates.length === 0" class="loading-templates">
+        Loading templates...
+      </div>
+      <div v-else-if="userTemplates.length > 0" class="templates-grid">
         <div v-for="template in userTemplates" :key="template.templateId" class="template-card">
           <h4>{{ template.name }}</h4>
           <div class="template-details">
@@ -143,7 +143,7 @@
     </div>
 
     <!-- Weekly Volume Tracking -->
-    <div v-if="selectedUserId" class="weekly-volume">
+    <div v-if="currentUser" class="weekly-volume">
       <h3>Weekly Volume Tracking</h3>
       <div class="volume-controls">
         <input 
@@ -189,12 +189,12 @@
 
 <script setup lang="ts">
 import { ref, computed, watch, onMounted } from 'vue'
-import { routinePlannerApi, userManagementApi, exerciseCatalogApi } from '../services/api'
+import { currentUser, getUserId } from '../services/auth'
+import { routinePlannerApi, exerciseCatalogApi } from '../services/api'
+import { handleApiError } from '../utils/errorHandler'
 import type { WorkoutTemplate, WeeklyVolume, CreateTemplateRequest } from '../types/api'
 
-const users = ref<any[]>([])
 const exercises = ref<any[]>([])
-const selectedUserId = ref('')
 const userTemplates = ref<WorkoutTemplate[]>([])
 const suggestedTemplate = ref<WorkoutTemplate | null>(null)
 const weeklyVolume = ref<WeeklyVolume[]>([])
@@ -217,12 +217,16 @@ const maxVolume = computed(() => {
 })
 
 const createTemplate = async () => {
-  if (!selectedUserId.value) return
+  const userId = getUserId()
+  if (!userId) {
+    alert('Please select a user to continue.')
+    return
+  }
 
   loading.value = true
   try {
     await routinePlannerApi.createTemplate({
-      user: selectedUserId.value,
+      user: userId,
       name: newTemplate.value.name,
       exercises: newTemplate.value.exercises
     })
@@ -239,80 +243,87 @@ const createTemplate = async () => {
     await loadUserTemplates()
     alert('Template created successfully!')
   } catch (error) {
-    console.error('Error creating template:', error)
-    alert('Failed to create template. Please try again.')
+    handleApiError(error, 'Failed to create template')
   } finally {
     loading.value = false
   }
 }
 
 const getSuggestedWorkout = async () => {
-  if (!selectedUserId.value) return
+  const userId = getUserId()
+  if (!userId) return
 
   loading.value = true
   try {
-    const result = await routinePlannerApi.getSuggestedWorkout(selectedUserId.value, suggestionDate.value)
+    const result = await routinePlannerApi.getSuggestedWorkout(userId, suggestionDate.value)
     suggestedTemplate.value = result.template
   } catch (error) {
-    console.error('Error getting suggested workout:', error)
-    alert('Failed to get suggested workout. Please try again.')
+    handleApiError(error, 'Failed to get suggested workout')
   } finally {
     loading.value = false
   }
 }
 
 const setAsDefaultTemplate = async (templateId?: string) => {
-  if (!selectedUserId.value) return
+  const userId = getUserId()
+  if (!userId) return
 
   const id = templateId || suggestedTemplate.value?.templateId
   if (!id) return
 
   loading.value = true
   try {
-    await routinePlannerApi.setDefaultTemplate(selectedUserId.value, id)
+    await routinePlannerApi.setDefaultTemplate(userId, id)
     alert('Template set as default successfully!')
   } catch (error) {
-    console.error('Error setting default template:', error)
-    alert('Failed to set default template. Please try again.')
+    handleApiError(error, 'Failed to set default template')
   } finally {
     loading.value = false
   }
 }
 
 const loadUserTemplates = async () => {
-  if (!selectedUserId.value) return
+  const userId = getUserId()
+  if (!userId) return
 
+  loading.value = true
   try {
-    userTemplates.value = await routinePlannerApi.getUserTemplates(selectedUserId.value)
+    const templates = await routinePlannerApi.getUserTemplates(userId)
+    userTemplates.value = templates || []
+    console.log('Loaded templates:', templates)
   } catch (error) {
-    console.error('Error loading user templates:', error)
+    console.error('Error loading templates:', error)
+    handleApiError(error, 'Failed to load user templates')
+    userTemplates.value = []
+  } finally {
+    loading.value = false
   }
 }
 
 const loadWeeklyVolume = async () => {
-  if (!selectedUserId.value) return
+  const userId = getUserId()
+  if (!userId) return
 
   loading.value = true
   try {
-    weeklyVolume.value = await routinePlannerApi.getWeeklyVolume(selectedUserId.value, volumeWeekStart.value)
+    weeklyVolume.value = await routinePlannerApi.getWeeklyVolume(userId, volumeWeekStart.value)
   } catch (error) {
-    console.error('Error loading weekly volume:', error)
-    alert('Failed to load weekly volume. Please try again.')
+    handleApiError(error, 'Failed to load weekly volume')
   } finally {
     loading.value = false
   }
 }
 
 const checkBalance = async () => {
-  if (!selectedUserId.value) return
+  const userId = getUserId()
+  if (!userId) return
 
   loading.value = true
   try {
-    const result = await routinePlannerApi.checkBalance(selectedUserId.value, volumeWeekStart.value)
+    const result = await routinePlannerApi.checkBalance(userId, volumeWeekStart.value)
     muscleImbalances.value = result.imbalance
   } catch (error) {
-    console.error('Error checking balance:', error)
-    alert('Failed to check muscle balance. Please try again.')
+    handleApiError(error, 'Failed to check muscle balance')
   } finally {
     loading.value = false
   }
@@ -323,25 +334,17 @@ const getExerciseName = (exerciseId: string) => {
   return exercise ? exercise.name : exerciseId
 }
 
-const loadUsers = async () => {
-  try {
-    users.value = await userManagementApi.getAllUsers()
-  } catch (error) {
-    console.error('Error loading users:', error)
-  }
-}
-
 const loadExercises = async () => {
   try {
     const result = await exerciseCatalogApi.getAllExercises()
     exercises.value = result.exercises
   } catch (error) {
-    console.error('Error loading exercises:', error)
+    handleApiError(error, 'Failed to load exercises')
   }
 }
 
-// Watch for user selection changes
-watch(selectedUserId, (newUserId) => {
+// Watch for user authentication changes
+watch(() => currentUser.value?.userId, (newUserId) => {
   if (newUserId) {
     newTemplate.value.user = newUserId
     loadUserTemplates()
@@ -354,8 +357,10 @@ watch(selectedUserId, (newUserId) => {
 })
 
 onMounted(() => {
-  loadUsers()
   loadExercises()
+  if (getUserId()) {
+    loadUserTemplates()
+  }
 })
 </script>
 
@@ -385,13 +390,18 @@ onMounted(() => {
   align-items: center;
 }
 
-.user-select {
-  padding: 0.75rem;
-  border: 1px solid #d1e7f0;
-  border-radius: 4px;
-  font-size: 1rem;
-  min-width: 200px;
+.user-info {
+  display: flex;
+  align-items: center;
+}
+
+.user-name {
+  font-weight: 600;
+  color: #4a90a4;
+  padding: 0.5rem 1rem;
   background: #fafcfd;
+  border-radius: 4px;
+  border: 1px solid #d1e7f0;
 }
 
 .create-template-form {
@@ -738,11 +748,15 @@ onMounted(() => {
   cursor: not-allowed;
 }
 
-.no-suggestion, .no-templates {
+.no-suggestion, .no-templates, .loading-templates {
   text-align: center;
   padding: 2rem;
   color: #6c757d;
   font-style: italic;
+}
+
+.loading-templates {
+  font-style: normal;
 }
 
 @media (max-width: 768px) {

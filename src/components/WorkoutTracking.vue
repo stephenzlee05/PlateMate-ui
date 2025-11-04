@@ -3,13 +3,10 @@
     <div class="header">
       <h2>Workout Tracking</h2>
       <div class="header-controls">
-        <select v-model="selectedUserId" class="user-select">
-          <option value="">Select User</option>
-          <option v-for="user in users" :key="user.userId" :value="user.userId">
-            {{ user.username }}
-          </option>
-        </select>
-        <button @click="startNewSession" class="btn btn-primary" :disabled="!selectedUserId || loading">
+        <div class="user-info">
+          <span class="user-name">{{ currentUser?.username }}</span>
+        </div>
+        <button @click="startNewSession" class="btn btn-primary" :disabled="loading">
           {{ loading ? 'Starting...' : 'Start New Session' }}
         </button>
       </div>
@@ -139,7 +136,7 @@
           placeholder="Limit"
           class="limit-input"
         />
-        <button @click="loadWorkoutHistory" class="btn btn-secondary" :disabled="!selectedUserId">
+        <button @click="loadWorkoutHistory" class="btn btn-secondary">
           Load History
         </button>
       </div>
@@ -170,7 +167,7 @@
     </div>
 
     <!-- User Sessions -->
-    <div v-if="selectedUserId" class="user-sessions">
+    <div class="user-sessions">
       <h3>All Sessions</h3>
       <div v-if="userSessions.length > 0" class="sessions-list">
         <div v-for="session in userSessions" :key="session.sessionId" class="session-item">
@@ -226,12 +223,12 @@
 
 <script setup lang="ts">
 import { ref, onMounted, watch } from 'vue'
-import { workoutTrackingApi, userManagementApi, exerciseCatalogApi } from '../services/api'
+import { currentUser, getUserId } from '../services/auth'
+import { workoutTrackingApi, exerciseCatalogApi } from '../services/api'
+import { handleApiError } from '../utils/errorHandler'
 import type { WorkoutSession, ExerciseRecord, StartSessionRequest, RecordExerciseRequest } from '../types/api'
 
-const users = ref<any[]>([])
 const exercises = ref<any[]>([])
-const selectedUserId = ref('')
 const currentSession = ref<WorkoutSession | null>(null)
 const sessionExercises = ref<ExerciseRecord[]>([])
 const workoutHistory = ref<ExerciseRecord[]>([])
@@ -253,7 +250,11 @@ const exerciseForm = ref<RecordExerciseRequest>({
 })
 
 const startNewSession = async () => {
-  if (!selectedUserId.value) return
+  const userId = getUserId()
+  if (!userId) {
+    alert('Please select a user to continue.')
+    return
+  }
 
   loading.value = true
   try {
@@ -263,15 +264,16 @@ const startNewSession = async () => {
     // Generate session name from current date and time
     const sessionName = generateSessionName(now)
     
+    // requireAuth: true automatically injects userId, but we still need to pass user for the request
     const result = await workoutTrackingApi.startSession({
-      user: selectedUserId.value,
+      user: userId,
       date: today,
       name: sessionName
     })
     
     currentSession.value = {
       sessionId: result.sessionId,
-      user: selectedUserId.value,
+      user: userId,
       date: today,
       name: sessionName
     }
@@ -279,8 +281,7 @@ const startNewSession = async () => {
     exerciseForm.value.sessionId = result.sessionId
     await loadUserSessions()
   } catch (error) {
-    console.error('Error starting session:', error)
-    alert('Failed to start session. Please try again.')
+    handleApiError(error, 'Failed to start session')
   } finally {
     loading.value = false
   }
@@ -322,29 +323,30 @@ const loadSessionExercises = async (sessionId: string) => {
 }
 
 const loadWorkoutHistory = async () => {
-  if (!selectedUserId.value || !historyExerciseFilter.value) return
+  const userId = getUserId()
+  if (!userId || !historyExerciseFilter.value) return
 
   loading.value = true
   try {
     const result = await workoutTrackingApi.getWorkoutHistory(
-      selectedUserId.value,
+      userId,
       historyExerciseFilter.value,
       historyLimit.value
     )
     workoutHistory.value = result.records
   } catch (error) {
-    console.error('Error loading workout history:', error)
-    alert('Failed to load workout history. Please try again.')
+    handleApiError(error, 'Failed to load workout history')
   } finally {
     loading.value = false
   }
 }
 
 const loadUserSessions = async () => {
-  if (!selectedUserId.value) return
+  const userId = getUserId()
+  if (!userId) return
 
   try {
-    const sessions = await workoutTrackingApi.getUserSessions(selectedUserId.value)
+    const sessions = await workoutTrackingApi.getUserSessions(userId)
     
     // Generate names for sessions that don't have them
     userSessions.value = sessions.map(session => ({
@@ -352,7 +354,7 @@ const loadUserSessions = async () => {
       name: session.name || generateSessionNameFromDate(session.date)
     }))
   } catch (error) {
-    console.error('Error loading user sessions:', error)
+    handleApiError(error, 'Failed to load user sessions')
   }
 }
 
@@ -453,25 +455,17 @@ const formatTime = (dateString: string) => {
   return new Date(dateString).toLocaleTimeString()
 }
 
-const loadUsers = async () => {
-  try {
-    users.value = await userManagementApi.getAllUsers()
-  } catch (error) {
-    console.error('Error loading users:', error)
-  }
-}
-
 const loadExercises = async () => {
   try {
     const result = await exerciseCatalogApi.getAllExercises()
     exercises.value = result.exercises
   } catch (error) {
-    console.error('Error loading exercises:', error)
+    handleApiError(error, 'Failed to load exercises')
   }
 }
 
-// Watch for user selection changes
-watch(selectedUserId, (newUserId) => {
+// Watch for user authentication changes
+watch(() => currentUser.value?.userId, (newUserId) => {
   if (newUserId) {
     loadUserSessions()
   } else {
@@ -483,8 +477,10 @@ watch(selectedUserId, (newUserId) => {
 })
 
 onMounted(() => {
-  loadUsers()
   loadExercises()
+  if (getUserId()) {
+    loadUserSessions()
+  }
 })
 </script>
 
@@ -514,13 +510,18 @@ onMounted(() => {
   align-items: center;
 }
 
-.user-select {
-  padding: 0.75rem;
-  border: 1px solid #90caf9;
-  border-radius: 4px;
-  font-size: 1rem;
-  min-width: 200px;
+.user-info {
+  display: flex;
+  align-items: center;
+}
+
+.user-name {
+  font-weight: 600;
+  color: #4a90a4;
+  padding: 0.5rem 1rem;
   background: #f0f8ff;
+  border-radius: 4px;
+  border: 1px solid #90caf9;
 }
 
 .current-session {

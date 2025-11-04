@@ -5,50 +5,57 @@
       <p>Your comprehensive fitness tracking companion</p>
     </header>
     
-    <nav class="nav-tabs">
-      <button 
-        v-for="tab in tabs" 
-        :key="tab.id"
-        :class="{ active: activeTab === tab.id }"
-        @click="activeTab = tab.id"
-        class="tab-button"
-      >
-        {{ tab.label }}
-      </button>
-    </nav>
+    <!-- User Authentication -->
+    <UserAuth />
+    
+    <!-- Main App Content (shown only when authenticated) -->
+    <div v-if="isAuthenticated">
+      <nav class="nav-tabs">
+        <button 
+          v-for="tab in tabs" 
+          :key="tab.id"
+          :class="{ active: activeTab === tab.id }"
+          @click="activeTab = tab.id"
+          class="tab-button"
+        >
+          {{ tab.label }}
+        </button>
+      </nav>
 
-    <main class="main-content">
-      <!-- Exercise Catalog Tab -->
-      <div v-if="activeTab === 'exercises'" class="tab-content">
-        <ExerciseCatalog />
-      </div>
+      <main class="main-content">
+        <!-- Exercise Catalog Tab -->
+        <div v-if="activeTab === 'exercises'" class="tab-content">
+          <ExerciseCatalog />
+        </div>
 
-      <!-- User Management Tab -->
-      <div v-if="activeTab === 'users'" class="tab-content">
-        <UserManagement />
-      </div>
+        <!-- User Management Tab -->
+        <div v-if="activeTab === 'users'" class="tab-content">
+          <UserManagement />
+        </div>
 
-      <!-- Workout Tracking Tab -->
-      <div v-if="activeTab === 'workouts'" class="tab-content">
-        <WorkoutTracking />
-      </div>
+        <!-- Workout Tracking Tab -->
+        <div v-if="activeTab === 'workouts'" class="tab-content">
+          <WorkoutTracking />
+        </div>
 
-      <!-- Progression Tracking Tab -->
-      <div v-if="activeTab === 'progression'" class="tab-content">
-        <ProgressionTracking />
-      </div>
+        <!-- Progression Tracking Tab -->
+        <div v-if="activeTab === 'progression'" class="tab-content">
+          <ProgressionTracking />
+        </div>
 
-      <!-- Routine Planning Tab -->
-      <div v-if="activeTab === 'routines'" class="tab-content">
-        <RoutinePlanning />
-      </div>
-
-    </main>
+        <!-- Routine Planning Tab -->
+        <div v-if="activeTab === 'routines'" class="tab-content">
+          <RoutinePlanning />
+        </div>
+      </main>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue'
+import { isAuthenticated } from './services/auth'
+import UserAuth from './components/UserAuth.vue'
 import ExerciseCatalog from './components/ExerciseCatalog.vue'
 import UserManagement from './components/UserManagement.vue'
 import WorkoutTracking from './components/WorkoutTracking.vue'

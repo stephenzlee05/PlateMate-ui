@@ -69,6 +69,13 @@
         </div>
       </div>
 
+      <!-- Delete User Button -->
+      <div class="user-actions">
+        <button @click="deleteUser(selectedUser.userId)" class="btn btn-danger" :disabled="loading">
+          {{ loading ? 'Deleting...' : 'Delete User' }}
+        </button>
+      </div>
+
       <!-- User Preferences -->
       <div class="preferences-section">
         <h4>Preferences</h4>
@@ -135,9 +142,14 @@
               <strong>Email:</strong> {{ user.email }}
             </div>
           </div>
-          <button @click="selectUser(user.userId)" class="btn btn-sm btn-secondary">
-            View Details
-          </button>
+          <div class="user-card-actions">
+            <button @click="selectUser(user.userId)" class="btn btn-sm btn-secondary">
+              View Details
+            </button>
+            <button @click="deleteUser(user.userId)" class="btn btn-sm btn-danger" :disabled="loading">
+              {{ loading ? 'Deleting...' : 'Delete' }}
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -271,6 +283,38 @@ const loadAllUsers = async () => {
   } catch (error) {
     console.error('Error loading users:', error)
     alert('Failed to load users. Please check your connection.')
+  } finally {
+    loading.value = false
+  }
+}
+
+const deleteUser = async (userId: string) => {
+  // Get username for confirmation message
+  const user = allUsers.value.find(u => u.userId === userId) || selectedUser.value
+  const username = user?.username || userId
+  
+  // Show confirmation dialog
+  const confirmed = confirm(`Are you sure you want to delete user "${username}" (${userId})? This action cannot be undone and will remove all user data, preferences, and associated records.`)
+  if (!confirmed) return
+
+  loading.value = true
+  try {
+    await userManagementApi.deleteUser(userId)
+    
+    // If we're deleting the currently selected user, clear the selection
+    if (selectedUser.value && selectedUser.value.userId === userId) {
+      selectedUser.value = null
+      userPreferences.value = null
+      userIdSearch.value = ''
+    }
+    
+    // Reload the users list
+    await loadAllUsers()
+    
+    alert('User deleted successfully.')
+  } catch (error) {
+    console.error('Error deleting user:', error)
+    alert('Failed to delete user. Please try again.')
   } finally {
     loading.value = false
   }
@@ -452,6 +496,18 @@ onMounted(() => {
   margin: 1rem 0;
 }
 
+.user-card-actions {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.user-actions {
+  margin-bottom: 2rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid #dee2e6;
+}
+
 .btn {
   padding: 0.75rem 1.5rem;
   border: none;
@@ -483,6 +539,15 @@ onMounted(() => {
 
 .btn-secondary:hover {
   background: #5a6268;
+}
+
+.btn-danger {
+  background: #dc3545;
+  color: white;
+}
+
+.btn-danger:hover:not(:disabled) {
+  background: #c82333;
 }
 
 .btn:disabled {
