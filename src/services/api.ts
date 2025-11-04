@@ -22,7 +22,7 @@ import { getUserId } from './auth';
 
 const API_BASE_URL = '/api';
 const REQUEST_TIMEOUT = 30000; // 30 seconds
-const API_BASE = import.meta.env.VITE_API_BASE_URL || '/api';
+//const API_BASE = import.meta.env.VITE_API_BASE_URL || '/api';
 
 /**
  * Enhanced API Error class with specific error types
