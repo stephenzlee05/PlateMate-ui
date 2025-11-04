@@ -88,7 +88,7 @@
             </div>
           </div>
           <div class="template-actions">
-            <button @click="setAsDefaultTemplate" class="btn btn-success" :disabled="loading">
+            <button @click="() => setAsDefaultTemplate()" class="btn btn-success" :disabled="loading">
               {{ loading ? 'Setting...' : 'Set as Default' }}
             </button>
           </div>

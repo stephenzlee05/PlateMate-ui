@@ -217,7 +217,8 @@ const loadExercises = async () => {
     exercises.value = result.exercises
   } catch (error) {
     console.error('Error loading exercises:', error)
-    alert(`Failed to load exercises: ${error.message}`)
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error'
+    alert(`Failed to load exercises: ${errorMessage}`)
   } finally {
     loading.value = false
   }

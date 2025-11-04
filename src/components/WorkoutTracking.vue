@@ -226,7 +226,7 @@ import { ref, onMounted, watch } from 'vue'
 import { currentUser, getUserId } from '../services/auth'
 import { workoutTrackingApi, exerciseCatalogApi } from '../services/api'
 import { handleApiError } from '../utils/errorHandler'
-import type { WorkoutSession, ExerciseRecord, StartSessionRequest, RecordExerciseRequest } from '../types/api'
+import type { WorkoutSession, ExerciseRecord, RecordExerciseRequest } from '../types/api'
 
 const exercises = ref<any[]>([])
 const currentSession = ref<WorkoutSession | null>(null)
