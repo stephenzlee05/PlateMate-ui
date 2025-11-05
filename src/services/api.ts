@@ -96,6 +96,10 @@ async function apiRequest<T>(
 
     clearTimeout(timeoutId);
 
+    // Read response body once (can only be read once)
+    const contentType = response.headers.get('content-type');
+    const text = await response.text();
+    
     // Handle HTTP errors
     if (!response.ok) {
       // Handle 504 Gateway Timeout
@@ -110,27 +114,58 @@ async function apiRequest<T>(
       // Try to parse error response
       let errorMessage = `HTTP error! status: ${response.status}`;
       try {
-        const errorResult = await response.json();
-        if (errorResult.error) {
-          errorMessage = errorResult.error;
-          
-          // Check for "User not found" error
-          const isUserNotFound = errorMessage.toLowerCase().includes('user not found');
-          
-          throw new ApiError(
-            errorMessage,
-            response.status,
-            false,
-            isUserNotFound
-          );
+        // Check if response has content before parsing
+        if (text && contentType && contentType.includes('application/json')) {
+          const errorResult = JSON.parse(text);
+          if (errorResult.error) {
+            errorMessage = errorResult.error;
+            
+            // Check for "User not found" error
+            const isUserNotFound = errorMessage.toLowerCase().includes('user not found');
+            
+            throw new ApiError(
+              errorMessage,
+              response.status,
+              false,
+              isUserNotFound
+            );
+          }
         }
       } catch (parseError) {
         // If JSON parsing fails, use generic error
         throw new ApiError(errorMessage, response.status);
       }
+      
+      // If we get here, throw the generic error
+      throw new ApiError(errorMessage, response.status);
     }
 
-    const result = await response.json();
+    // Handle empty responses (common after Render deployments during initialization)
+    if (!text || text.trim() === '') {
+      throw new ApiError(
+        'Server returned an empty response. The server may still be initializing. Please try again in a moment.',
+        204
+      );
+    }
+    
+    // Check if response is JSON
+    if (!contentType || !contentType.includes('application/json')) {
+      throw new ApiError(
+        `Unexpected response format. Expected JSON but received ${contentType || 'unknown'}.`,
+        response.status
+      );
+    }
+    
+    // Parse JSON response
+    let result;
+    try {
+      result = JSON.parse(text);
+    } catch (parseError) {
+      throw new ApiError(
+        'Failed to parse server response. The response may be incomplete or corrupted.',
+        response.status
+      );
+    }
     
     // Check for error in response body
     if (result.error) {
